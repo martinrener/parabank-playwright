@@ -3,7 +3,12 @@
   "version": "1.0.0",
   "description": "DET Training - Playwright TypeScript framework for ParaBank",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui",
+    "lint": "eslint ."
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/martinrener/parabank-playwright.git"
@@ -18,7 +23,11 @@
   "homepage": "https://github.com/martinrener/parabank-playwright#readme",
   "devDependencies": {
     "@playwright/test": "^1.60.0",
-    "@types/node": "^25.9.0"
+    "@types/node": "^25.9.0",
+    "@typescript-eslint/eslint-plugin": "^8.59.4",
+    "@typescript-eslint/parser": "^8.59.4",
+    "eslint": "^10.4.0",
+    "prettier": "^3.8.3"
   },
   "dependencies": {
     "dotenv": "^17.4.2"
