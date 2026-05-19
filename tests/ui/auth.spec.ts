@@ -33,12 +33,14 @@ test.describe('Auth', () => {
   );
 
   test(
-    'AUTH-003 > Login > Unauthenticated access to overview redirects to login',
+    'AUTH-003 > Login > Unauthenticated access to overview shows customer login form',
     { annotation: { type: 'id', description: 'AUTH-003' } },
     async ({ loginPage, page }) => {
       await loginPage.goToOverview();
 
-      await expect(page).toHaveURL(/\/parabank\/login\.htm/);
+      // ParaBank does not redirect to /login.htm — it renders the page in a
+      // logged-out state with the customer login form visible in the sidebar
+      await expect(page.locator('input[name="username"]')).toBeVisible();
     },
   );
 });

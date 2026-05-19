@@ -2,7 +2,8 @@ import { type Page } from '@playwright/test';
 import { BasePage } from './BasePage';
 
 export class LoginPage extends BasePage {
-  static readonly URL = '/parabank/login.htm';
+  // GET /parabank/login.htm returns an empty page — the login form lives on the index page
+  static readonly URL = '/parabank/index.htm';
   static readonly OVERVIEW_URL = '/parabank/overview.htm';
 
   constructor(page: Page) {
@@ -18,8 +19,9 @@ export class LoginPage extends BasePage {
   }
 
   async fillCredentials(username: string, password: string) {
-    await this.page.getByLabel('Username').fill(username);
-    await this.page.getByLabel('Password').fill(password);
+    // ParaBank uses <b> tags as visual labels, not proper <label> elements
+    await this.page.locator('input[name="username"]').fill(username);
+    await this.page.locator('input[name="password"]').fill(password);
   }
 
   async submit() {
