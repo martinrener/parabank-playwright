@@ -46,6 +46,10 @@ export class BaseAPI {
     return response.json();
   }
 
+  async transfer(fromAccountId: string, toAccountId: string, amount: number): Promise<void> {
+    await this.post('/transfer', { params: { fromAccountId, toAccountId, amount } });
+  }
+
   async createAccount(customerId: string, accountType: string, fromAccountId: string): Promise<Account> {
     const response = await this.post(`/customers/${customerId}/createAccount`, {
       params: { accountType, fromAccountId },
