@@ -8,7 +8,7 @@ import { BaseAPI } from './BaseAPI';
 const USERNAME = process.env.TEST_USERNAME ?? 'john';
 const PASSWORD = process.env.TEST_PASSWORD ?? 'demo';
 
-type PageObjects = {
+type MyFixtures = {
   loginPage: LoginPage;
   accountsPage: AccountsPage;
   activityPage: ActivityPage;
@@ -16,7 +16,7 @@ type PageObjects = {
   api: BaseAPI;
 };
 
-export const test = base.extend<PageObjects>({
+export const test = base.extend<MyFixtures>({
   loginPage: async ({ page }, use) => {
     await use(new LoginPage(page));
   },
