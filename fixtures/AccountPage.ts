@@ -23,7 +23,7 @@ export class AccountPage extends BasePage {
       });
     });
 
-    await this.page.goto('/parabank/overview.htm');
+    await this.goToOverview();
     await this.page.getByRole('link', { name: 'Open New Account' }).click();
   }
 
@@ -50,10 +50,6 @@ export class AccountPage extends BasePage {
 
   async getNewAccountNumber() {
     return (await this.page.locator('#openAccountResult a').first().textContent())!.trim();
-  }
-
-  async goToOverview() {
-    await this.page.goto('/parabank/overview.htm');
   }
 
   firstAccountLink() {

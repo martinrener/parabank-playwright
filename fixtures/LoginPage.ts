@@ -4,7 +4,6 @@ import { BasePage } from './BasePage';
 export class LoginPage extends BasePage {
   // GET /parabank/login.htm returns an empty page — the login form lives on the index page
   static readonly URL = '/parabank/index.htm';
-  static readonly OVERVIEW_URL = '/parabank/overview.htm';
 
   constructor(page: Page) {
     super(page);
@@ -12,10 +11,6 @@ export class LoginPage extends BasePage {
 
   async goToLogin() {
     await this.page.goto(LoginPage.URL);
-  }
-
-  async goToOverview() {
-    await this.page.goto(LoginPage.OVERVIEW_URL);
   }
 
   async fillCredentials(username: string, password: string) {
