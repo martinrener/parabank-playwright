@@ -36,8 +36,20 @@ export class BaseAPI {
     return response.json();
   }
 
+  async getAccount(accountId: string): Promise<Account> {
+    const response = await this.get(`/accounts/${accountId}`);
+    return response.json();
+  }
+
   async getTransactions(accountId: string): Promise<Transaction[]> {
     const response = await this.get(`/accounts/${accountId}/transactions`);
+    return response.json();
+  }
+
+  async createAccount(customerId: string, accountType: string, fromAccountId: string): Promise<Account> {
+    const response = await this.post(`/customers/${customerId}/createAccount`, {
+      params: { accountType, fromAccountId },
+    });
     return response.json();
   }
 }
