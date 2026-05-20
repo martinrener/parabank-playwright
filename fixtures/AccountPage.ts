@@ -43,4 +43,33 @@ export class AccountPage extends BasePage {
   async submit() {
     await this.page.getByRole('button', { name: 'Open New Account' }).click();
   }
+
+  confirmationHeading() {
+    return this.page.getByRole('heading', { name: 'Account Opened!' });
+  }
+
+  async getNewAccountNumber() {
+    return (await this.page.locator('#openAccountResult a').first().textContent())!.trim();
+  }
+
+  async goToOverview() {
+    await this.page.goto('/parabank/overview.htm');
+  }
+
+  firstAccountLink() {
+    return this.page.locator('#accountTable tbody').getByRole('link').first();
+  }
+
+  async accountInOverviewTable(accountNumber: string) {
+    const headers = this.page.locator('#accountTable th');
+    const count = await headers.count();
+    for (let i = 0; i < count; i++) {
+      if ((await headers.nth(i).textContent())?.trim() === 'Account') {
+        return this.page
+          .locator(`#accountTable tbody tr td:nth-child(${i + 1})`)
+          .getByRole('link', { name: accountNumber, exact: true });
+      }
+    }
+    throw new Error('Account column not found in accounts table');
+  }
 }
