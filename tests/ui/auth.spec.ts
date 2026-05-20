@@ -7,17 +7,16 @@ test.describe('Auth', () => {
   test(
     'AUTH-001 > Login > Valid credentials redirects to account overview',
     { annotation: { type: 'id', description: 'AUTH-001' } },
-    async ({ loginPage, page }) => {
+    async ({ loginPage }) => {
       // Arrange
       await loginPage.goToLogin();
-      await loginPage.fillCredentials(USERNAME, PASSWORD);
 
       // Act
-      await loginPage.submit();
+      await loginPage.login(USERNAME, PASSWORD);
 
       // Assert
-      await expect(page).toHaveURL(/\/parabank\/overview\.htm/);
-      await expect(page.getByText('Welcome John Smith')).toBeVisible();
+      await loginPage.expectOverview();
+      await expect(loginPage.getByText('Welcome John Smith')).toBeVisible();
     },
   );
 
@@ -27,30 +26,27 @@ test.describe('Auth', () => {
     async ({ loginPage, page }) => {
       // Arrange
       await loginPage.goToLogin();
-      await loginPage.fillCredentials('invalid_user', 'invalid_pass');
 
       // Act
-      await loginPage.submit();
+      await loginPage.login('invalid_user', 'invalid_pass');
 
       // Assert
       await expect(page).toHaveURL(/\/parabank\/login\.htm/);
-      await expect(
-        page.getByText('The username and password could not be verified.'),
-      ).toBeVisible();
+      await loginPage.expectError();
     },
   );
 
   test(
     'AUTH-003 > Login > Unauthenticated access to overview shows customer login form',
     { annotation: { type: 'id', description: 'AUTH-003' } },
-    async ({ loginPage, page }) => {
+    async ({ loginPage }) => {
       // Act
       await loginPage.goToOverview();
 
       // Assert
       // ParaBank does not redirect to /login.htm — it renders the page in a
       // logged-out state with the customer login form visible in the sidebar
-      await expect(page.locator('input[name="username"]')).toBeVisible();
+      await expect(loginPage.locator('input[name="username"]')).toBeVisible();
     },
   );
 });

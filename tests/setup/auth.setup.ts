@@ -10,8 +10,7 @@ setup('authenticate', async ({ page, request }) => {
 
   const loginPage = new LoginPage(page);
   await loginPage.goToLogin();
-  await loginPage.fillCredentials(USERNAME, PASSWORD);
-  await loginPage.submit();
+  await loginPage.login(USERNAME, PASSWORD);
   await page.waitForURL(/\/parabank\/overview\.htm/);
   await page.context().storageState({ path: '.auth/user.json' });
 });

@@ -1,4 +1,4 @@
-import { type Page } from '@playwright/test';
+import { type Page, expect } from '@playwright/test';
 import { BasePage } from './BasePage';
 
 export class LoginPage extends BasePage {
@@ -13,13 +13,20 @@ export class LoginPage extends BasePage {
     await this.goto(LoginPage.URL);
   }
 
-  async fillCredentials(username: string, password: string) {
+  async login(username: string, password: string) {
     // ParaBank uses <b> tags as visual labels, not proper <label> elements
     await this.locator('input[name="username"]').fill(username);
     await this.locator('input[name="password"]').fill(password);
+    await this.getByRole('button', { name: 'Log In' }).click();
   }
 
-  async submit() {
-    await this.getByRole('button', { name: 'Log In' }).click();
+  async expectOverview() {
+    await expect(this.page).toHaveURL(/\/overview\.htm/);
+  }
+
+  async expectError() {
+    await expect(
+      this.getByText('The username and password could not be verified.'),
+    ).toBeVisible();
   }
 }
