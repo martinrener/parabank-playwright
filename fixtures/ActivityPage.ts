@@ -12,11 +12,11 @@ export class ActivityPage extends BasePage {
   }
 
   async goToActivity() {
-    await this.page.goto(`${ActivityPage.URL}?id=${this.accountId}`);
+    await this.goto(`${ActivityPage.URL}?id=${this.accountId}`);
   }
 
   getTable() {
-    return this.page.locator('#transactionTable');
+    return this.locator('#transactionTable');
   }
 
   getTransactionRows() {
