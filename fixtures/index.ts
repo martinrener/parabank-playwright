@@ -2,6 +2,7 @@ import { test as base, expect } from '@playwright/test';
 import { LoginPage } from './LoginPage';
 import { AccountsPage } from './AccountsPage';
 import { ActivityPage } from './ActivityPage';
+import { TransferPage } from './TransferPage';
 import { getCustomer } from '../functions/auth';
 
 const USERNAME = process.env.TEST_USERNAME ?? 'john';
@@ -11,6 +12,7 @@ type PageObjects = {
   loginPage: LoginPage;
   accountsPage: AccountsPage;
   activityPage: ActivityPage;
+  transferPage: TransferPage;
 };
 
 export const test = base.extend<PageObjects>({
@@ -28,6 +30,9 @@ export const test = base.extend<PageObjects>({
     );
     const [firstAccount] = await response.json();
     await use(new ActivityPage(page, String(firstAccount.id)));
+  },
+  transferPage: async ({ page }, use) => {
+    await use(new TransferPage(page));
   },
 });
 
