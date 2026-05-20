@@ -73,6 +73,10 @@ export class AccountsPage extends BasePage {
     await link.click();
   }
 
+  async clickFirstAccount() {
+    await this.locator('#accountTable tbody').getByRole('link').first().click();
+  }
+
   firstAccountLink() {
     return this.locator('#accountTable tbody').getByRole('link').first();
   }

@@ -23,7 +23,7 @@ test.describe('Auth', () => {
   test(
     'AUTH-002 > Login > Invalid credentials shows error and stays on login',
     { annotation: { type: 'id', description: 'AUTH-002' } },
-    async ({ loginPage, page }) => {
+    async ({ loginPage }) => {
       // Arrange
       await loginPage.goToLogin();
 
@@ -31,7 +31,7 @@ test.describe('Auth', () => {
       await loginPage.login('invalid_user', 'invalid_pass');
 
       // Assert
-      await expect(page).toHaveURL(/\/parabank\/login\.htm/);
+      await loginPage.expectLoginUrl();
       await loginPage.expectError();
     },
   );
@@ -44,9 +44,7 @@ test.describe('Auth', () => {
       await loginPage.goToOverview();
 
       // Assert
-      // ParaBank does not redirect to /login.htm — it renders the page in a
-      // logged-out state with the customer login form visible in the sidebar
-      await expect(loginPage.locator('input[name="username"]')).toBeVisible();
+      await loginPage.expectLoginForm();
     },
   );
 });

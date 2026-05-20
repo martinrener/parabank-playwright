@@ -3,8 +3,10 @@ import { type Page } from '@playwright/test';
 // Declaration merging: tells TypeScript that BasePage instances have all Page
 // methods. The Proxy in the constructor delegates unknown property access to
 // the inner page at runtime, so subclasses call this.goto() not this.page.goto().
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type, @typescript-eslint/no-unsafe-declaration-merging
 export interface BasePage extends Page {}
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export class BasePage {
   static readonly OVERVIEW_URL = '/parabank/overview.htm';
   static readonly LOGOUT_URL = '/parabank/logout.htm';
@@ -18,8 +20,8 @@ export class BasePage {
         if (prop in target) {
           return Reflect.get(target, prop, receiver);
         }
-        const value = (page as any)[prop];
-        return typeof value === 'function' ? value.bind(page) : value;
+        const value = (page as unknown as Record<string | symbol, unknown>)[prop];
+        return typeof value === 'function' ? (value as (...args: unknown[]) => unknown).bind(page) : value;
       },
     }) as this;
   }

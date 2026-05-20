@@ -24,6 +24,14 @@ export class LoginPage extends BasePage {
     await expect(this.page).toHaveURL(/\/overview\.htm/);
   }
 
+  async expectLoginUrl() {
+    await expect(this.page).toHaveURL(/\/parabank\/login\.htm/);
+  }
+
+  async expectLoginForm() {
+    await expect(this.locator('input[name="username"]')).toBeVisible();
+  }
+
   async expectError() {
     await expect(
       this.getByText('The username and password could not be verified.'),

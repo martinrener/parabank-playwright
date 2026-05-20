@@ -1,4 +1,4 @@
-import { type Page } from '@playwright/test';
+import { type Page, expect } from '@playwright/test';
 import { BasePage } from './BasePage';
 
 export class ActivityPage extends BasePage {
@@ -21,5 +21,9 @@ export class ActivityPage extends BasePage {
 
   getTransactionRows() {
     return this.getTable().locator('tbody tr');
+  }
+
+  async expectActivityUrl() {
+    await expect(this.page).toHaveURL(/activity\.htm/);
   }
 }

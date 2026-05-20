@@ -37,3 +37,8 @@ export const test = base.extend<MyFixtures>({
 });
 
 export { expect };
+
+export { login } from '../helpers/auth';
+export { getAccounts, openAccount, getBalance } from '../helpers/accounts';
+export { transfer, getTransactions } from '../helpers/transfers';
+export { uniqueUsername, uniquePassword, buildRegistrationData, buildTransferPayload } from '../helpers/testData';

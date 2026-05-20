@@ -1,4 +1,4 @@
-import { test, expect } from '../../fixtures';
+import { test, expect, login, getAccounts } from '../../fixtures';
 
 const USERNAME = process.env.TEST_USERNAME ?? 'john';
 const PASSWORD = process.env.TEST_PASSWORD ?? 'demo';
@@ -9,10 +9,10 @@ test.describe('Accounts API', () => {
     { annotation: { type: 'id', description: 'ACC-001' } },
     async ({ api }) => {
       // Arrange
-      const { id } = await api.login(USERNAME, PASSWORD);
+      const customerId = await login(api, USERNAME, PASSWORD);
 
       // Act
-      const accounts = await api.getAccounts(String(id));
+      const accounts = await getAccounts(api, customerId);
 
       // Assert
       expect(accounts.length).toBeGreaterThan(0);
