@@ -4,6 +4,8 @@ import { AccountsPage } from './AccountsPage';
 import { ActivityPage } from './ActivityPage';
 import { TransferPage } from './TransferPage';
 import { BaseAPI } from './BaseAPI';
+import { login } from '../helpers/auth';
+import { getAccounts } from '../helpers/accounts';
 
 const USERNAME = process.env.TEST_USERNAME ?? 'john';
 const PASSWORD = process.env.TEST_PASSWORD ?? 'demo';
@@ -24,9 +26,10 @@ export const test = base.extend<MyFixtures>({
     await use(new AccountsPage(page));
   },
   activityPage: async ({ page, api }, use) => {
-    const { id } = await api.login(USERNAME, PASSWORD);
-    const [firstAccount] = await api.getAccounts(String(id));
-    await use(new ActivityPage(page, String(firstAccount.id)));
+    const customerId = await login(api, USERNAME, PASSWORD);
+    const accounts = await getAccounts(api, customerId);
+    if (accounts.length === 0) throw new Error('No accounts found for activityPage fixture');
+    await use(new ActivityPage(page, String(accounts[0].id)));
   },
   transferPage: async ({ page }, use) => {
     await use(new TransferPage(page));
@@ -37,8 +40,9 @@ export const test = base.extend<MyFixtures>({
 });
 
 export { expect };
+export { LoginPage };
 
-export { login } from '../helpers/auth';
+export { login };
 export { getAccounts, openAccount, getBalance } from '../helpers/accounts';
 export { transfer, getTransactions } from '../helpers/transfers';
 export { uniqueUsername, uniquePassword, buildRegistrationData, buildTransferPayload } from '../helpers/testData';

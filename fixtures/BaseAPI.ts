@@ -18,11 +18,11 @@ export class BaseAPI {
     });
   }
 
-  async get(path: string) {
+  protected async get(path: string) {
     return this.request('GET', path);
   }
 
-  async post(path: string, options?: FetchOptions) {
+  protected async post(path: string, options?: FetchOptions) {
     return this.request('POST', path, options);
   }
 

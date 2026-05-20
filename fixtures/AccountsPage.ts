@@ -1,12 +1,8 @@
-import { type Page, expect } from '@playwright/test';
+import { expect } from '@playwright/test';
 import { BasePage } from './BasePage';
 
 export class AccountsPage extends BasePage {
   static readonly URL = '/parabank/openaccount.htm';
-
-  constructor(page: Page) {
-    super(page);
-  }
 
   async openNewAccount(type: string, fromId?: string) {
     await this.interceptAccountsProxy();
@@ -56,32 +52,33 @@ export class AccountsPage extends BasePage {
     await this.getByRole('button', { name: 'Open New Account' }).click();
   }
 
-  confirmationHeading() {
-    return this.getByRole('heading', { name: 'Account Opened!' });
+  async expectConfirmationHeading() {
+    await expect(this.getByRole('heading', { name: 'Account Opened!' })).toBeVisible();
   }
 
   async getNewAccountNumber() {
-    return (await this.locator('#openAccountResult a').first().textContent())!.trim();
+    const link = this.locator('#openAccountResult a').first();
+    await link.waitFor({ state: 'visible' });
+    return (await link.textContent() ?? '').trim();
   }
 
   async expectAccountList() {
     await expect(this.locator('#accountTable')).toBeVisible();
   }
 
-  async clickAccount(id: string) {
-    const link = await this.accountInOverviewTable(id);
-    await link.click();
+  async clickAccount(accountNumber: string) {
+    await (await this.findAccountLink(accountNumber)).click();
   }
 
   async clickFirstAccount() {
     await this.locator('#accountTable tbody').getByRole('link').first().click();
   }
 
-  firstAccountLink() {
-    return this.locator('#accountTable tbody').getByRole('link').first();
+  async expectAccountInOverviewTable(accountNumber: string) {
+    await expect(await this.findAccountLink(accountNumber)).toBeVisible();
   }
 
-  async accountInOverviewTable(accountNumber: string) {
+  private async findAccountLink(accountNumber: string) {
     const headers = this.locator('#accountTable th');
     const count = await headers.count();
     for (let i = 0; i < count; i++) {

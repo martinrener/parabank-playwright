@@ -1,5 +1,5 @@
 import { test as setup } from '@playwright/test';
-import { LoginPage } from '../../fixtures/LoginPage';
+import { LoginPage } from '../../fixtures';
 import { initializeDatabase } from '../../functions/admin';
 
 const USERNAME = process.env.TEST_USERNAME ?? 'john';

@@ -1,12 +1,8 @@
-import { type Page, expect } from '@playwright/test';
+import { expect } from '@playwright/test';
 import { BasePage } from './BasePage';
 
 export class TransferPage extends BasePage {
   static readonly URL = '/parabank/transfer.htm';
-
-  constructor(page: Page) {
-    super(page);
-  }
 
   async goToTransfer() {
     await this.goto(TransferPage.URL);

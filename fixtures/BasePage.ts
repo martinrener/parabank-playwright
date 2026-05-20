@@ -34,19 +34,4 @@ export class BasePage {
     await this.goto(BasePage.LOGOUT_URL);
   }
 
-  async navigateHome() {
-    await this.getByRole('link', { name: 'home' }).click();
-  }
-
-  async navigateAbout() {
-    await this.getByRole('link', { name: 'About Us' }).click();
-  }
-
-  async navigateContact() {
-    await this.getByRole('link', { name: 'Contact' }).click();
-  }
-
-  async navigateAdmin() {
-    await this.getByRole('link', { name: 'Admin Page' }).click();
-  }
 }

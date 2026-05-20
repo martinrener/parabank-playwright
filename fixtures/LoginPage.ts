@@ -1,13 +1,9 @@
-import { type Page, expect } from '@playwright/test';
+import { expect } from '@playwright/test';
 import { BasePage } from './BasePage';
 
 export class LoginPage extends BasePage {
   // GET /parabank/login.htm returns an empty page — the login form lives on the index page
   static readonly URL = '/parabank/index.htm';
-
-  constructor(page: Page) {
-    super(page);
-  }
 
   async goToLogin() {
     await this.goto(LoginPage.URL);
