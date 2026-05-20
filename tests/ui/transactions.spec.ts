@@ -4,12 +4,12 @@ test.describe('Transactions', () => {
   test(
     'TRN-001 > Transactions > Account activity page shows transaction table with entries',
     { annotation: { type: 'id', description: 'TRN-001' } },
-    async ({ accountPage, activityPage, page }) => {
+    async ({ accountsPage, activityPage, page }) => {
       // Arrange
-      await accountPage.goToOverview();
+      await accountsPage.goToOverview();
 
       // Act
-      await accountPage.firstAccountLink().click();
+      await accountsPage.firstAccountLink().click();
 
       // Assert
       await expect(page).toHaveURL(/activity\.htm/);

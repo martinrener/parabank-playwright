@@ -1,6 +1,6 @@
 import { test as base, expect } from '@playwright/test';
 import { LoginPage } from './LoginPage';
-import { AccountPage } from './AccountPage';
+import { AccountsPage } from './AccountsPage';
 import { ActivityPage } from './ActivityPage';
 import { getCustomer } from '../functions/auth';
 
@@ -9,7 +9,7 @@ const PASSWORD = process.env.TEST_PASSWORD ?? 'demo';
 
 type PageObjects = {
   loginPage: LoginPage;
-  accountPage: AccountPage;
+  accountsPage: AccountsPage;
   activityPage: ActivityPage;
 };
 
@@ -17,8 +17,8 @@ export const test = base.extend<PageObjects>({
   loginPage: async ({ page }, use) => {
     await use(new LoginPage(page));
   },
-  accountPage: async ({ page }, use) => {
-    await use(new AccountPage(page));
+  accountsPage: async ({ page }, use) => {
+    await use(new AccountsPage(page));
   },
   activityPage: async ({ page, request }, use) => {
     const { id } = await getCustomer(request, USERNAME, PASSWORD);
