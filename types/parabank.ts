@@ -29,3 +29,21 @@ export interface Transaction {
   amount: number;
   description: string;
 }
+
+export interface RegistrationData {
+  firstName: string;
+  lastName: string;
+  address: string;
+  city: string;
+  state: string;
+  zipCode: string;
+  ssn: string;
+  username: string;
+  password: string;
+}
+
+export interface TransferPayload {
+  fromId: string;
+  toId: string;
+  amount: number;
+}
