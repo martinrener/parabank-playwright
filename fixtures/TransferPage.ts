@@ -18,7 +18,7 @@ export class TransferPage extends BasePage {
   async expectSuccess(amount: string, fromId: string, toId: string) {
     await expect(this.getByRole('heading', { name: 'Transfer Complete!' })).toBeVisible();
     await expect(
-      this.getByText(`$${amount} has been transferred from account #${fromId} to account #${toId}.`),
+      this.getByText(`$${parseFloat(amount).toFixed(2)} has been transferred from account #${fromId} to account #${toId}.`)
     ).toBeVisible();
   }
 }
