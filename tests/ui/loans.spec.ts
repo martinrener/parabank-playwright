@@ -13,6 +13,7 @@ test.describe('Loans', () => {
 
       // Assert
       await loanPage.expectApproved();
+      // Cleanup — N/A: ParaBank API has no delete endpoint; DB reset via beforeAll handles isolation
     },
   );
 
@@ -28,6 +29,7 @@ test.describe('Loans', () => {
 
       // Assert
       await loanPage.expectDenied();
+      // Cleanup — N/A: ParaBank API has no delete endpoint; DB reset via beforeAll handles isolation
     },
   );
 });

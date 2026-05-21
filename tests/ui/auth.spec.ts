@@ -1,4 +1,4 @@
-import { test, expect } from '../../fixtures';
+import { test } from '../../fixtures';
 import { getEnvVar } from '../../functions/common'
 
 const USERNAME = getEnvVar('TEST_USERNAME')
@@ -17,7 +17,7 @@ test.describe('Auth', () => {
 
       // Assert
       await loginPage.expectOverview();
-      await expect(loginPage.getByText('Welcome John Smith')).toBeVisible();
+      await loginPage.expectWelcome();
     },
   );
 
@@ -41,6 +41,8 @@ test.describe('Auth', () => {
     'AUTH-003 > Login > Unauthenticated access to overview shows customer login form',
     { annotation: { type: 'id', description: 'AUTH-003' } },
     async ({ loginPage }) => {
+      // Arrange — N/A: no setup required
+
       // Act
       await loginPage.goToOverview();
 

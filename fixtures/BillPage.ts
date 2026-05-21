@@ -29,6 +29,10 @@ export class BillPage extends BasePage {
     await expect(this.getByRole('heading', { name: 'Bill Payment Complete' })).toBeVisible();
   }
 
+  async submitEmpty() {
+    await this.getByRole('button', { name: 'Send Payment' }).click();
+  }
+
   async expectValidationError() {
     await expect(this.locator('.error').first()).toBeVisible();
   }

@@ -33,4 +33,8 @@ export class LoginPage extends BasePage {
       this.getByText('The username and password could not be verified.'),
     ).toBeVisible();
   }
+
+  async expectWelcome() {
+    await expect(this.getByText('Welcome John Smith')).toBeVisible();
+  }
 }

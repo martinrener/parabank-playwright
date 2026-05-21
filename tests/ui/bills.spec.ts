@@ -13,6 +13,7 @@ test.describe('Bills', () => {
 
       // Assert
       await billPage.expectPaymentComplete();
+      // Cleanup — N/A: ParaBank API has no delete endpoint; DB reset via beforeAll handles isolation
     },
   );
 
@@ -24,7 +25,7 @@ test.describe('Bills', () => {
       await billPage.goToBillPay();
 
       // Act
-      await billPage.getByRole('button', { name: 'Send Payment' }).click();
+      await billPage.submitEmpty();
 
       // Assert
       await billPage.expectValidationError();

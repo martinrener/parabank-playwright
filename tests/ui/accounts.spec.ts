@@ -2,7 +2,7 @@ import { test } from '../../fixtures';
 
 test.describe('Accounts', () => {
   test(
-    'ACC-002 > Open Account > New CHECKING account shows confirmation',
+    'ACC-002 > Accounts > Open new CHECKING account, confirmation is shown',
     { annotation: { type: 'id', description: 'ACC-002' } },
     async ({ accountsPage }) => {
       // Arrange — authenticated session via storageState

@@ -1,6 +1,8 @@
 import { test, expect, login, getAccounts, transfer, getBalance, getTransactions } from '../../fixtures';
 import { openAccount } from '../../helpers/accounts';
 import { getEnvVar } from '../../functions/common';
+import { request as playwrightRequest } from '@playwright/test';
+import { initializeDatabase } from '../../functions/admin';
 
 const USERNAME = getEnvVar('TEST_USERNAME');
 const PASSWORD = getEnvVar('TEST_PASSWORD');
@@ -8,7 +10,14 @@ const CHECKING_ACCOUNT = '0';
 const SAVINGS_ACCOUNT = '1';
 
 test.describe('Accounts API', () => {
-  test.describe.configure({ mode: 'parallel' });
+  // API tests run serially: ParaBank has no delete endpoints, parallel runs cause account state conflicts.
+  test.describe.configure({ mode: 'serial' });
+
+  test.beforeAll(async () => {
+    const context = await playwrightRequest.newContext();
+    await initializeDatabase(context);
+    await context.dispose();
+  });
 
   test(
     'ACC-001 > Accounts > Customer accounts list returns at least one account',
@@ -42,14 +51,10 @@ test.describe('Accounts API', () => {
       // Act
       await transfer(api, sourceId, destId, amount);
 
-      try {
-        // Assert
-        expect(await getBalance(api, sourceId)).toBe(oldBalanceSource - amount);
-        expect(await getBalance(api, destId)).toBe(oldBalanceDest + amount);
-      } finally {
-        // Cleanup: reverse the transfer so accounts stay in a neutral state
-        await transfer(api, destId, sourceId, amount);
-      }
+      // Assert
+      expect(await getBalance(api, sourceId)).toBe(oldBalanceSource - amount);
+      expect(await getBalance(api, destId)).toBe(oldBalanceDest + amount);
+      // Cleanup — N/A: ParaBank API has no delete endpoint; DB reset via beforeAll handles isolation
     },
   );
 
@@ -70,14 +75,10 @@ test.describe('Accounts API', () => {
       // Act — ParaBank does not enforce balance limits; overdraft is accepted
       await transfer(api, sourceId, destId, amount);
 
-      try {
-        // Assert
-        expect(await getBalance(api, sourceId)).toBe(oldBalanceSource - amount);
-        expect(await getBalance(api, destId)).toBe(oldBalanceDest + amount);
-      } finally {
-        // Cleanup: reverse the transfer
-        await transfer(api, destId, sourceId, amount);
-      }
+      // Assert
+      expect(await getBalance(api, sourceId)).toBe(oldBalanceSource - amount);
+      expect(await getBalance(api, destId)).toBe(oldBalanceDest + amount);
+      // Cleanup — N/A: ParaBank API has no delete endpoint; DB reset via beforeAll handles isolation
     },
   );
 
@@ -117,14 +118,10 @@ test.describe('Accounts API', () => {
       // Act
       await transfer(api, sourceId, destId, amount);
 
-      try {
-        // Assert — ParaBank accepts negative amounts; source gains 50, dest loses 50
-        expect(await getBalance(api, sourceId)).toBe(oldBalanceSource - amount);
-        expect(await getBalance(api, destId)).toBe(oldBalanceDest + amount);
-      } finally {
-        // Cleanup: transfer(dest, source, amount) undoes transfer(source, dest, amount) for any amount
-        await transfer(api, destId, sourceId, amount);
-      }
+      // Assert — ParaBank accepts negative amounts; source gains 50, dest loses 50
+      expect(await getBalance(api, sourceId)).toBe(oldBalanceSource - amount);
+      expect(await getBalance(api, destId)).toBe(oldBalanceDest + amount);
+      // Cleanup — N/A: ParaBank API has no delete endpoint; DB reset via beforeAll handles isolation
     },
   );
 

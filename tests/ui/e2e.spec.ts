@@ -23,6 +23,7 @@ test.describe('E2E', () => {
 
       // Assert — transfer complete confirms both balances updated
       await transferPage.expectSuccess('100', newAccountId, firstAccountId);
+      // Cleanup — N/A: ParaBank API has no delete endpoint; DB reset via beforeAll handles isolation
     },
   );
 
@@ -42,6 +43,7 @@ test.describe('E2E', () => {
       // Assert — at least one transaction row is visible in account activity
       await activityPage.goToActivity();
       await expect(activityPage.getTransactionRows().first()).toBeVisible();
+      // Cleanup — N/A: ParaBank API has no delete endpoint; DB reset via beforeAll handles isolation
     },
   );
 
@@ -62,6 +64,7 @@ test.describe('E2E', () => {
       // Assert — new account number appears in the overview table
       await accountsPage.goToOverview();
       await accountsPage.expectAccountInOverviewTable(newAccountNumber!);
+      // Cleanup — N/A: ParaBank API has no delete endpoint; DB reset via beforeAll handles isolation
     },
   );
 });
