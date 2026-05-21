@@ -51,8 +51,8 @@ export class BaseAPI {
   }
 
   async createAccount(customerId: string, accountType: string, fromAccountId: string): Promise<Account> {
-    const response = await this.post(`/customers/${customerId}/createAccount`, {
-      params: { accountType, fromAccountId },
+    const response = await this.post('/createAccount', {
+      params: { customerId, newAccountType: accountType, fromAccountId },
     });
     return response.json();
   }
