@@ -23,6 +23,24 @@ export class ActivityPage extends BasePage {
     return this.getTable().locator('tbody tr');
   }
 
+  getDateCells() {
+    return this.getTransactionRows().locator('td:nth-child(1)');
+  }
+
+  getDebitCells() {
+    return this.getTransactionRows().locator('td:nth-child(3)');
+  }
+
+  getCreditCells() {
+    return this.getTransactionRows().locator('td:nth-child(4)');
+  }
+
+  async filterActivity(period: string, type: string) {
+    await this.locator('#month').selectOption(period);
+    await this.selectOption('#transactionType', type);
+    await this.getByRole('button', { name: 'Go' }).click();
+  }
+
   async expectActivityUrl() {
     await expect(this.page).toHaveURL(/activity\.htm/);
   }
