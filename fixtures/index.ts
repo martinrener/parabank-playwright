@@ -4,6 +4,7 @@ import { AccountsPage } from './AccountsPage';
 import { ActivityPage } from './ActivityPage';
 import { TransferPage } from './TransferPage';
 import { LoanPage } from './LoanPage';
+import { BillPage } from './BillPage';
 import { BaseAPI } from './BaseAPI';
 import { login } from '../helpers/auth';
 import { getAccounts } from '../helpers/accounts';
@@ -18,6 +19,7 @@ type MyFixtures = {
   activityPage: ActivityPage;
   transferPage: TransferPage;
   loanPage: LoanPage;
+  billPage: BillPage;
   api: BaseAPI;
 };
 
@@ -39,6 +41,9 @@ export const test = base.extend<MyFixtures>({
   },
   loanPage: async ({ page }, use) => {
     await use(new LoanPage(page));
+  },
+  billPage: async ({ page }, use) => {
+    await use(new BillPage(page));
   },
   api: async ({ request }, use) => {
     await use(new BaseAPI(request));
