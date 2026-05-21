@@ -9,7 +9,7 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
+  workers: process.env.CI ? 1 : 2,
   reporter: 'html',
   use: {
     baseURL: process.env.BASE_URL || 'https://parabank.parasoft.com',
@@ -45,9 +45,16 @@ export default defineConfig({
       testMatch: /auth\.spec\.ts$/,
     },
 
+    // --- API setup: resets DB once before any api test runs ---
+    {
+      name: 'db-setup',
+      testMatch: /db\.setup\.ts$/,
+    },
+
     // --- API tests (no browser) ---
     {
       name: 'api',
+      dependencies: ['db-setup'],
       testMatch: /\.api\.test\.ts$/,
     },
   ],

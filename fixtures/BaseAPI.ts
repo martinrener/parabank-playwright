@@ -11,11 +11,15 @@ export class BaseAPI {
   }
 
   private async request(method: string, path: string, options?: FetchOptions) {
-    return this.context.fetch(`${this.baseUrl}${path}`, {
+    const response = await this.context.fetch(`${this.baseUrl}${path}`, {
       ...options,
       method,
       headers: { Accept: 'application/json', ...options?.headers },
     });
+    if (!response.ok()) {
+      throw new Error(`HTTP ${response.status()} ${method} ${path}: ${await response.text()}`);
+    }
+    return response;
   }
 
   protected async get(path: string) {

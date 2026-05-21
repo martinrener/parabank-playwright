@@ -1,10 +1,8 @@
 import { type APIRequestContext } from '@playwright/test';
 import { getEnvVar } from './common'
 
-const URL = getEnvVar('BASE_URL')
+const API_BASE_URL = getEnvVar('API_BASE_URL')
 
 export async function initializeDatabase(request: APIRequestContext) {
-  await request.post(`${URL}/parabank/admin.htm`, {
-    form: { action: 'INIT' },
-  });
+  await request.post(`${API_BASE_URL}/initializeDB`);
 }
