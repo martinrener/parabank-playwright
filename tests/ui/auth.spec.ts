@@ -1,7 +1,8 @@
 import { test, expect } from '../../fixtures';
+import { getEnvVar } from '../../functions/common'
 
-const USERNAME = process.env.TEST_USERNAME ?? 'john';
-const PASSWORD = process.env.TEST_PASSWORD ?? 'demo';
+const USERNAME = getEnvVar('TEST_USERNAME')
+const PASSWORD = getEnvVar('TEST_PASSWORD')
 
 test.describe('Auth', () => {
   test(

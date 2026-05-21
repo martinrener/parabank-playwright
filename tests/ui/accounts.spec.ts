@@ -19,6 +19,7 @@ test.describe('Accounts', () => {
 
       // Assert — new account appears in the accounts list
       await accountsPage.expectAccountInOverviewTable(newAccountNumber);
+      // Cleanup — N/A: ParaBank API does not support account deletion
     },
   );
 });

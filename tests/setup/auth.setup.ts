@@ -1,9 +1,10 @@
 import { test as setup } from '@playwright/test';
 import { LoginPage } from '../../fixtures';
 import { initializeDatabase } from '../../functions/admin';
+import { getEnvVar } from '../../functions/common'
 
-const USERNAME = process.env.TEST_USERNAME ?? 'john';
-const PASSWORD = process.env.TEST_PASSWORD ?? 'demo';
+const USERNAME = getEnvVar('TEST_USERNAME')
+const PASSWORD = getEnvVar('TEST_PASSWORD')
 
 setup('authenticate', async ({ page, request }) => {
   await initializeDatabase(request);
