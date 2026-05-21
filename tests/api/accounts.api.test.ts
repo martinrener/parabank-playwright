@@ -1,4 +1,4 @@
-import { test, expect, login, getAccounts, transfer, getBalance } from '../../fixtures';
+import { test, expect, login, getAccounts, transfer, getBalance, getTransactions } from '../../fixtures';
 import { openAccount } from '../../helpers/accounts';
 import { getEnvVar } from '../../functions/common';
 
@@ -125,6 +125,28 @@ test.describe('Accounts API', () => {
         // Cleanup: transfer(dest, source, amount) undoes transfer(source, dest, amount) for any amount
         await transfer(api, destId, sourceId, amount);
       }
+    },
+  );
+
+  test(
+    'TRN-004 > Transactions > first transaction matches Transaction interface shape',
+    { annotation: { type: 'id', description: 'TRN-004' } },
+    async ({ api }) => {
+      // Arrange
+      const customerId = await login(api, USERNAME, PASSWORD);
+      const accounts = await getAccounts(api, customerId);
+
+      // Act
+      const transactions = await getTransactions(api, String(accounts[0].id));
+
+      // Assert
+      const tx = transactions[0];
+      expect(typeof tx.id).toBe('number');
+      expect(typeof tx.accountId).toBe('number');
+      expect(typeof tx.type).toBe('string');
+      expect(typeof tx.date).toBe('number');
+      expect(typeof tx.amount).toBe('number');
+      expect(typeof tx.description).toBe('string');
     },
   );
 });
