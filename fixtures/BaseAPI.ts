@@ -1,4 +1,4 @@
-import { type APIRequestContext } from '@playwright/test';
+import { type APIRequestContext, type APIResponse } from '@playwright/test';
 import type { Customer, Account, Transaction } from '../types/parabank';
 
 type FetchOptions = Parameters<APIRequestContext['fetch']>[1];
@@ -10,12 +10,20 @@ export class BaseAPI {
     this.baseUrl = process.env.API_BASE_URL ?? '';
   }
 
-  private async request(method: string, path: string, options?: FetchOptions) {
+  private async request(method: string, path: string, options?: FetchOptions, attempt = 0): Promise<APIResponse> {
     const response = await this.context.fetch(`${this.baseUrl}${path}`, {
       ...options,
       method,
       headers: { Accept: 'application/json', ...options?.headers },
     });
+
+    if (response.status() === 429 && attempt < 3) {
+      const body = await response.json().catch(() => ({}));
+      const retryAfter = (body?.retry_after ?? 1) * Math.pow(2, attempt);
+      await new Promise(resolve => setTimeout(resolve, retryAfter * 1000));
+      return this.request(method, path, options, attempt + 1);
+    }
+
     if (!response.ok()) {
       throw new Error(`HTTP ${response.status()} ${method} ${path}: ${await response.text()}`);
     }

@@ -1,4 +1,5 @@
 import { type Page } from '@playwright/test';
+import { expect } from '@playwright/test';
 
 // Declaration merging: tells TypeScript that BasePage instances have all Page
 // methods. The Proxy in the constructor delegates unknown property access to
@@ -34,4 +35,18 @@ export class BasePage {
     await this.goto(BasePage.LOGOUT_URL);
   }
 
+  async simulateServerError(urlPattern: string) {
+    await this.route(urlPattern, route => route.fulfill({ status: 500 }));
+  }
+
+  async getLoadTime(): Promise<number> {
+    return this.page.evaluate(() => {
+      const [entry] = performance.getEntriesByType('navigation') as PerformanceNavigationTiming[];
+      return entry.loadEventEnd - entry.startTime;
+    });
+  }
+
+  async expectErrorMessage() {
+      await expect(this.getByText('An internal error has occurred and has been logged.')).toBeVisible()
+  }
 }
