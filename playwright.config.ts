@@ -9,7 +9,8 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : 2,
+  // ParaBank is a shared public server — more than 1 concurrent worker causes intermittent timeouts
+  workers: 1,
   reporter: [
       ['./reporter/reporter.ts'],
       ['html'],

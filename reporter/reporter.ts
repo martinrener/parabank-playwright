@@ -1,4 +1,4 @@
-import type { Reporter, TestCase, TestResult, FullResult, Suite, FullConfig } from '@playwright/test/reporter'
+import type { Reporter, TestCase, TestResult } from '@playwright/test/reporter'
 import fs from 'fs'
 
 type TestEntry = {
@@ -24,7 +24,7 @@ export default class CustomReporter implements Reporter {
         this.results.push(report)
     }
 
-    onEnd(result: FullResult) {
+    onEnd() {
         fs.mkdirSync('test-results', { recursive: true })
         fs.writeFileSync('test-results/report.json', JSON.stringify(this.results, null, 2))
         this.consoleSummary()

@@ -9,6 +9,7 @@ export class TransferPage extends BasePage {
   }
 
   async transfer(fromId: string, toId: string, amount: string) {
+    // ParaBank transfer form uses ID attributes without <label> elements — role/label selectors unavailable
     await this.locator('#amount').fill(amount);
     await this.locator('#fromAccountId').selectOption({ value: fromId });
     await this.locator('#toAccountId').selectOption({ value: toId });

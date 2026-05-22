@@ -25,6 +25,7 @@ export class LoginPage extends BasePage {
   }
 
   async expectLoginForm() {
+    // ParaBank uses <b> tags, not <label> — role/label selectors unavailable
     await expect(this.locator('input[name="username"]')).toBeVisible();
   }
 

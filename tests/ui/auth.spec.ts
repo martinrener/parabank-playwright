@@ -5,6 +5,10 @@ const USERNAME = getEnvVar('TEST_USERNAME')
 const PASSWORD = getEnvVar('TEST_PASSWORD')
 
 test.describe('Auth', () => {
+  test.afterEach(async ({ page }) => {
+    await page.unrouteAll();
+  });
+
   test(
     'AUTH-001 > Login > Valid credentials redirects to account overview',
     { annotation: { type: 'id', description: 'AUTH-001' } },

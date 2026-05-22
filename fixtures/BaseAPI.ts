@@ -11,15 +11,31 @@ export class BaseAPI {
   }
 
   private async request(method: string, path: string, options?: FetchOptions, attempt = 0): Promise<APIResponse> {
-    const response = await this.context.fetch(`${this.baseUrl}${path}`, {
+    let timeoutId: ReturnType<typeof setTimeout> | undefined;
+
+    const fetchPromise = this.context.fetch(`${this.baseUrl}${path}`, {
       ...options,
       method,
       headers: { Accept: 'application/json', ...options?.headers },
+      timeout: 15000,
+    });
+
+    // Promise.race gives a hard 15 s ceiling regardless of Playwright's internal timeouts
+    const timeoutPromise = new Promise<never>((_, reject) => {
+      timeoutId = setTimeout(
+        () => reject(new Error(`Request timed out: ${method} ${path}`)),
+        15000,
+      );
+    });
+
+    const response = await Promise.race([fetchPromise, timeoutPromise]).finally(() => {
+      clearTimeout(timeoutId);
     });
 
     if (response.status() === 429 && attempt < 3) {
       const body = await response.json().catch(() => ({}));
-      const retryAfter = (body?.retry_after ?? 1) * Math.pow(2, attempt);
+      // Respect server-specified wait; fall back to exponential backoff when absent
+      const retryAfter = body?.retry_after ?? Math.pow(2, attempt + 1);
       await new Promise(resolve => setTimeout(resolve, retryAfter * 1000));
       return this.request(method, path, options, attempt + 1);
     }

@@ -1,6 +1,10 @@
 import { test } from '../../fixtures';
 
 test.describe('Bills', () => {
+  test.afterEach(async ({ page }) => {
+    await page.unrouteAll();
+  });
+
   test(
     'BILL-001 > Bills > pay bill with valid payee and amount, payment complete heading is visible',
     { annotation: { type: 'id', description: 'BILL-001' } },

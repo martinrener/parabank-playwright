@@ -1,6 +1,10 @@
 import { test, expect } from '../../fixtures';
 
 test.describe('Transactions', () => {
+  test.afterEach(async ({ page }) => {
+    await page.unrouteAll();
+  });
+
   test(
     'TRN-001 > Transactions > Account activity page shows transaction table with entries',
     { annotation: { type: 'id', description: 'TRN-001' } },

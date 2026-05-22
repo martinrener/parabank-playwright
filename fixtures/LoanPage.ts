@@ -13,6 +13,7 @@ export class LoanPage extends BasePage {
   }
 
   async applyForLoan(amount: string, downPayment: string) {
+    // ParaBank loan form uses ID attributes without <label> elements — role/label selectors unavailable
     await this.locator('#amount').fill(amount);
     await this.locator('#downPayment').fill(downPayment);
     await this.getByRole('button', { name: 'Apply Now' }).click();

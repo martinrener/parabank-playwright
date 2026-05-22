@@ -1,6 +1,10 @@
 import { test } from '../../fixtures';
 
 test.describe('Accounts', () => {
+  test.afterEach(async ({ page }) => {
+    await page.unrouteAll();
+  });
+
   test(
     'ACC-002 > Accounts > Open new CHECKING account, confirmation is shown',
     { annotation: { type: 'id', description: 'ACC-002' } },

@@ -1,8 +1,6 @@
 import { test, expect, login, getAccounts, transfer, getBalance, getTransactions } from '../../fixtures';
 import { openAccount } from '../../helpers/accounts';
 import { getEnvVar } from '../../functions/common';
-import { request as playwrightRequest } from '@playwright/test';
-import { initializeDatabase } from '../../functions/admin';
 
 const USERNAME = getEnvVar('TEST_USERNAME');
 const PASSWORD = getEnvVar('TEST_PASSWORD');
@@ -12,12 +10,8 @@ const SAVINGS_ACCOUNT = '1';
 test.describe('Accounts API', () => {
   // API tests run serially: ParaBank has no delete endpoints, parallel runs cause account state conflicts.
   test.describe.configure({ mode: 'serial' });
-
-  test.beforeAll(async () => {
-    const context = await playwrightRequest.newContext();
-    await initializeDatabase(context);
-    await context.dispose();
-  });
+  // Generous timeout: serial chain of account creation + transfer ops can be slow on ParaBank's shared server
+  test.setTimeout(60000);
 
   test(
     'ACC-001 > Accounts > Customer accounts list returns at least one account',
@@ -125,6 +119,9 @@ test.describe('Accounts API', () => {
     },
   );
 
+});
+
+test.describe('Transactions API', () => {
   test(
     'TRN-004 > Transactions > first transaction matches Transaction interface shape',
     { annotation: { type: 'id', description: 'TRN-004' } },
@@ -146,5 +143,4 @@ test.describe('Accounts API', () => {
       expect(typeof tx.description).toBe('string');
     },
   );
-
 });

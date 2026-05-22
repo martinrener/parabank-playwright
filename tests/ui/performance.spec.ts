@@ -1,6 +1,10 @@
 import { test, expect } from '../../fixtures';
 
 test.describe('Performance', () => {
+  test.afterEach(async ({ page }) => {
+    await page.unrouteAll();
+  });
+
   test(
     'PERF-001 > Performance > overview loads within performance budget',
     { annotation: { type: 'id', description: 'PERF-001' } },

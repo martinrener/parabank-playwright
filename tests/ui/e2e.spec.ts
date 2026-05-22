@@ -1,6 +1,10 @@
 import { test, expect } from '../../fixtures';
 
 test.describe('E2E', () => {
+  test.afterEach(async ({ page }) => {
+    await page.unrouteAll();
+  });
+
   test(
     'E2E-001 > E2E > open checking account, verify in overview, transfer 100 to first account, verify transfer complete',
     { annotation: { type: 'id', description: 'E2E-001' } },

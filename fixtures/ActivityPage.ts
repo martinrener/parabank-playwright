@@ -36,6 +36,7 @@ export class ActivityPage extends BasePage {
   }
 
   async filterActivity(period: string, type: string) {
+    // ParaBank activity filter uses ID attributes without <label> elements — role/label selectors unavailable
     await this.locator('#month').selectOption(period);
     await this.selectOption('#transactionType', type);
     await this.getByRole('button', { name: 'Go' }).click();

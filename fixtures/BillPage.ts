@@ -13,6 +13,7 @@ export class BillPage extends BasePage {
   }
 
   async payBill(payeeName: string, amount: string) {
+    // ParaBank bill pay form uses name attributes without <label> elements — role/label selectors unavailable
     await this.locator('[name="payee.name"]').fill(payeeName);
     await this.locator('[name="payee.address.street"]').fill('123 Main St');
     await this.locator('[name="payee.address.city"]').fill('Boston');
@@ -34,6 +35,7 @@ export class BillPage extends BasePage {
   }
 
   async expectValidationError() {
+    // ParaBank validation errors use CSS class .error — no role or test-id available
     await expect(this.locator('.error').first()).toBeVisible();
   }
 }

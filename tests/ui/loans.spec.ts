@@ -1,6 +1,10 @@
 import { test } from '../../fixtures';
 
 test.describe('Loans', () => {
+  test.afterEach(async ({ page }) => {
+    await page.unrouteAll();
+  });
+
   test(
     'LOAN-001 > Loans > apply with valid amount and down payment, loan is approved',
     { annotation: { type: 'id', description: 'LOAN-001' } },
