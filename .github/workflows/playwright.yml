@@ -8,6 +8,13 @@ jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    environment: ${{ matrix.environment }}
+    env:
+      BASE_URL: ${{ secrets.BASE_URL }}
+    strategy:
+        matrix:
+          shard: [1, 2, 3]
+          environment: [staging, production]
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
@@ -18,10 +25,10 @@ jobs:
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
     - name: Run Playwright tests
-      run: npx playwright test
+      run: npx playwright test --shard=${{ matrix.shard }}/3
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
-        name: playwright-report
+        name: ${{ matrix.environment }} - playwright-report ${{ matrix.shard }}
         path: playwright-report/
         retention-days: 30
