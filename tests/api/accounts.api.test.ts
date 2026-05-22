@@ -146,4 +146,8 @@ test.describe('Accounts API', () => {
       expect(typeof tx.description).toBe('string');
     },
   );
+
+  test('TEMP - force fail', async ({ page }) => {
+      expect(1).toBe(2)
+  })
 });
