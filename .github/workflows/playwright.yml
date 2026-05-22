@@ -35,3 +35,15 @@ jobs:
         name: ${{ matrix.environment }} - playwright-report ${{ matrix.shard }}
         path: playwright-report/
         retention-days: 30
+    - name: Notify on failure
+      if: failure()
+      uses: dawidd6/action-send-mail@v3
+      with:
+        server_address: smtp.gmail.com
+        server_port: 465
+        username: ${{ secrets.MAIL_USERNAME }}
+        password: ${{ secrets.MAIL_PASSWORD }}
+        subject: "❌ Playwright Tests Failed - ${{ matrix.environment }} shard ${{ matrix.shard }}"
+        to: ${{ secrets.MAIL_TO }}
+        from: ${{ secrets.MAIL_USERNAME }}
+        body: "Tests failed on ${{ matrix.environment }} environment, shard ${{ matrix.shard }}. Check the run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
