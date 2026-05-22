@@ -147,7 +147,4 @@ test.describe('Accounts API', () => {
     },
   );
 
-  test('TEMP - force fail', async ({ page }) => {
-      expect(1).toBe(2)
-  })
 });
