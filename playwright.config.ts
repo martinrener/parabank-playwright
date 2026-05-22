@@ -10,7 +10,11 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : 2,
-  reporter: 'html',
+  reporter: [
+      ['./reporter/reporter.ts'],
+      ['html'],
+      ['list'],
+  ],
   use: {
     baseURL: process.env.BASE_URL || 'https://parabank.parasoft.com',
     trace: 'on-first-retry',
